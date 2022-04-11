@@ -1,3 +1,5 @@
+open Stdlib
+
 let src = Logs.Src.create "multipart-form"
 
 module Log = (val Logs.src_log src : Logs.LOG)
