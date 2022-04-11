@@ -14,7 +14,7 @@ let stream ?(bounds = 10) ~identify stream content_type =
     let id = fresh_id () in
     Queue.push (`Id (header, id)) q ;
     ((fun data -> Queue.push (`Data (id, data)) q), id) in
-  let parse = Multipart_form.parse ~emitters content_type in
+  let parse = Multipart_form.parse ~max_chunk_size:0x100 ~emitters content_type in
   let rec go () =
     match Queue.pop q with
     | `Id (header, id) ->
@@ -59,7 +59,8 @@ let of_stream_to_tbl s content_type =
   let parts_tbl = Hashtbl.create 0x10 in
   let consume_part (id, _, part_stream) =
     let buf = Buffer.create 4096 in
-    Lwt_stream.iter (Buffer.add_string buf) part_stream >>= fun () ->
+    Lwt_stream.iter (fun { Faraday.buffer; off; len } ->
+      Buffer.add_string buf (Bigstringaf.substring buffer ~off ~len)) part_stream >>= fun () ->
     Hashtbl.add parts_tbl id (Buffer.contents buf) ;
     Lwt.return () in
   Lwt.both t (Lwt_stream.iter_s consume_part parts) >>= fun (res, ()) ->

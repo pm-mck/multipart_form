@@ -8,7 +8,7 @@ val stream :
   string Lwt_stream.t ->
   Content_type.t ->
   [ `Parse of ('id t, [> `Msg of string ]) result Lwt.t ]
-  * ('id * Header.t * string Lwt_stream.t) Lwt_stream.t
+  * ('id * Header.t * Bigstringaf.t Faraday.iovec Lwt_stream.t) Lwt_stream.t
 (** [stream ~identify src content_type] returns:
     - a promise [th] about the parser
     - a stream [stream] of parts

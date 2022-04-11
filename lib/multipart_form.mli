@@ -191,7 +191,7 @@ end
 
 (** {2 Decoder.} *)
 
-type 'id emitters = Header.t -> (string option -> unit) * 'id
+type 'id emitters = Header.t -> (Bigstringaf.t Faraday.iovec option -> unit) * 'id
 (** Type of emitters.
 
     An [emitters] is able to produce from the given header a {i pusher} which is
@@ -218,6 +218,7 @@ val flatten : 'a t -> 'a elt list
 (** {3 Streaming API.} *)
 
 val parse :
+  max_chunk_size:int ->
   emitters:'id emitters ->
   Content_type.t ->
   [ `String of string | `Eof ] ->
@@ -265,7 +266,7 @@ val parse :
     streaming and non-streaming case.
  *)
 
-val parser : emitters:'id emitters -> Content_type.t -> 'id t Angstrom.t
+val parser : max_chunk_size:int -> emitters:'id emitters -> Content_type.t -> 'id t Angstrom.t
 (** [parse ~emitters content_type] gives access to the underlying [angstrom]
     parser used internally by the [parse] function. This is useful when one
     needs control over the parsing buffer used by Angstrom. *)

@@ -2,7 +2,7 @@
  (name test)
  (modules test)
  (libraries rosetta unstrctrd unstrctrd.parser alcotest fmt rresult result
-   angstrom multipart_form))
+   angstrom multipart_form faraday bigstringaf))
 
 (executable
  (name test_lwt)

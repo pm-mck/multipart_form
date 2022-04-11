@@ -14,6 +14,7 @@ depends: [
   "ocaml" {>= "4.08.0"}
   "dune" {>= "2.0.0"}
   "angstrom" {>= "0.14.0"}
+  "faraday"
   "base64" {>= "3.0.0"}
   "unstrctrd" {>= "0.2"}
   "result"
